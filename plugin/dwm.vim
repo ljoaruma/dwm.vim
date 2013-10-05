@@ -74,16 +74,22 @@ function! DWM_New()
   call DWM_ResizeMasterPaneWidth()
 endfunction
 
+if !exists('g:dwm_enable_switchback_on_focus')
+  let g:dwm_enable_switchback_on_focus = 1
+endif
+
 " Move the current window to the master pane (the previous master window is
 " added to the top of the stack). If current window is master already - switch
 " to stack top
 function! DWM_Focus()
-  if winnr('$') == 1
-    return
-  endif
+  if exists('g:dwm_enable_switchback_on_focus') && g:dwm_enable_switchback_on_focus
+    if winnr('$') == 1
+      return
+    endif
 
-  if winnr() == 1
-    wincmd w
+    if winnr() == 1
+      wincmd w
+    endif
   endif
 
   let l:curwin = winnr()
