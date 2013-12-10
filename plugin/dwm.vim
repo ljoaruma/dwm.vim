@@ -124,6 +124,18 @@ function! DWM_AutoEnter()
   call DWM_Focus()
 endfunction
 
+function! DWM_NeedRecreateLayout()
+  if &l:buflisted && &l:filetype != '' && !&l:previewwindow
+    return 1
+  endif
+
+  if &l:filetype == 'help'
+    return 1
+  endif
+
+  return 0
+endfunction
+
 " Close the current window
 function! DWM_Close()
   if winnr() == 1
@@ -232,6 +244,6 @@ endif
 if has('autocmd')
   augroup dwm
     au!
-    au BufWinEnter * if &l:buflisted || &l:filetype == 'help' | call DWM_AutoEnter() | endif
+    au BufWinEnter * if DWM_NeedRecreateLayout() | call DWM_AutoEnter() | endif
   augroup end
 endif
